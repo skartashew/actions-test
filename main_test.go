@@ -12,11 +12,12 @@ func TestRaceCondition(t *testing.T) {
 	wg.Add(5)
 
 	for i := 0; i < 5; i++ {
-		go func() {
-			time.Sleep(100 * time.Millisecond) // Добавляем задержку
-			fmt.Println(i)                     // Используем переменную i, захваченную по ссылке
+		go func(i int) {
+			time.Sleep(100 * time.Millisecond)
+			fmt.Println(i)
 			wg.Done()
-		}()
+		}(i) // Передаем значение i в горутину
+	}
 	}
 
 	wg.Wait() // Ожидаем завершения всех горутин
