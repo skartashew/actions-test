@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 	"testing"
+	"time"
 )
 
 func TestRaceCondition(t *testing.T) {
@@ -12,7 +13,8 @@ func TestRaceCondition(t *testing.T) {
 
 	for i := 0; i < 5; i++ {
 		go func() {
-			fmt.Println(i) // Используем переменную i, захваченную по ссылке
+			time.Sleep(100 * time.Millisecond) // Добавляем задержку
+			fmt.Println(i)                     // Используем переменную i, захваченную по ссылке
 			wg.Done()
 		}()
 	}
