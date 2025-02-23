@@ -1,19 +1,21 @@
 package main
 
 import (
+	"fmt"
+	"sync"
 	"testing"
 )
 
-func TestMaxInt(t *testing.T) {
-	a, b := 2, 7
+func TestRaceCondition(t *testing.T) {
+	var wg sync.WaitGroup
+	wg.Add(5)
 
-	res := MaxInt(a, b)
-
-	if res != b {
-		t.Errorf("expected %d, got %d", b, res)
+	for i := 0; i < 5; i++ {
+		go func() {
+			fmt.Println(i) // Используем переменную i, захваченную по ссылке
+			wg.Done()
+		}()
 	}
-}
 
-func TestMain(m *testing.M) {
-	main()
+	wg.Wait() // Ожидаем завершения всех горутин
 }
